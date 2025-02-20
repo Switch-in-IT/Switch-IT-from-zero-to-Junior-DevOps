@@ -8,3 +8,4 @@ assignees: ''
 ---
 
 - Some valuable task to do
+- Branch name: practice/00/0_some_task_name
