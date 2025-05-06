@@ -240,46 +240,24 @@ DHCP / DNS сервером выступает сетевой маршрутиз
 
 #### Выполнение задания
 1. Создай двух пользователей и общую папку между ними.
+   1. Под рутом:
+      1. `groupadd admins`: добавить новую группу
+      2. `adduser user_01`: добавить пользователя
+      3. `passwd user_01`: и задать ему пароль
+      4. `usermod -G admins user_01`: добавление пользователя в созданную группу
+      5. `mkdir ./tmp/shared`: создаем общую папку
+      6. `chown :admins shared`: делаем ей группу admins
+      7. chmod 770 shared: даем права на выполнение
+      8. chmod g+s shared: созданные файлы наследуют владельца каталога, а не пользователя (SGID)
+   2. Под пользователем:
+      1. `newgrp admins`: сменить эффективную группу пользователя
+      2. `touch file`: создаем файл в общей папке
+      3. `chmod 660 file`: даем разрешение на запись всем в группе
 2. Оба пользователя должны уметь читать и писать в эту папку
-1. Под рутом:
-   1. `groupadd admins`: добавить новую группу
-   2. `adduser user_01`: добавить пользователя
-   3. `passwd user_01`: и задать ему пароль
-   4. `usermod -G admins user_01`: добавление пользователя в созданную группу
-   5. `mkdir ./tmp/shared`: создаем общую папку
-   6. `chown :admins shared`: делаем ей группу admins
-   7. chmod 770 shared: даем права на выполнение
-   8. chmod g+s shared: созданные файлы наследуют владельца каталога, а не пользователя
-2. Под пользователем:
-   1. `newgrp admins`: сменить эффективную группу пользователя
-   2. `touch file`: создаем файл в общей папке
-   3. `chmod 660 file`: даем разрешение на запись всем в группе
-3. Повторить для другого пользователя
-
+   1. Повторить для другого пользователя
 
 ## Вопросы к ментору
-- Как размечать диски в Unix?
-  - Предлагамая Схема разметки:
-    1: Все файлы в одном разделе (рекомендуется новичкам) [*],
-    2: Отдельный раздел для /home,
-    3: Отдельные разделы для /home, /var u /tmp,
-  - ExFat или ext4?
-- Сеть
-  - Какой тип сети используется для гипервизоров? сетевой мост?
-  - VM генерирует рандомны MAC. А что если будут коллизии?
-  - Как пробросить ВМ за NAT?
-  - Почему мог поменяться физический адрес сетевого интерфейса? (enp6s0 -> enp112s0)
-- Администрирование
-  - Пароль от рута виртуалки один на все или всегда разный? Как провайдить / хранить пароли?
-  - Зависимости:
-    - После удаления все дерево зависимостей тоже удаляется?
-    - К зависимости всегда держится его дерево? не переиспользуются существующие?
-  - Почему мог не сработать os-prober после  `update-grub2` ? Пришлось вручную доавблять конфиг. Хотя `os-prober` видел партицию.
-- Мониторинг
-  - Что такое CPU Usage: Kernel?
-  - Что используют чтобы дампить результаты htop?
-  - Кроме CPU нужно смотреть еще RAM и свободное место? Чем? крона над df?
-
+Отсутствуют.
 
 ## Полезные ссылки
 ### 01_01
@@ -303,37 +281,11 @@ DHCP / DNS сервером выступает сетевой маршрутиз
   - [Установка и первоначальная настройка Debian 11 для сервера](https://interface31.ru/tech_it/2022/08/linux-nachinayushhim-ustanovka-i-pervonachal-naya-nastroyka-debian-11-dlya-servera.html)
   - [How to disable X server autostart in Debian Jessie?](https://unix.stackexchange.com/questions/264393/how-to-disable-x-server-autostart-in-debian-jessie)
 
-
-## Полезные ссылки
-- [Yandex Cloud Marketplace](https://yandex.cloud/ru/marketplace?categories=os&pageSize=75)
-- [Что такое дистрибутив Linux](https://ruweb.net/articles/distributiv-linux-chto-eto)
-- [В чем разница между дистрибутивами linux и какой выбрать?](https://qna.habr.com/q/192159)
-- [Установка и первоначальная настройка Debian 11 для сервера](https://interface31.ru/tech_it/2022/08/linux-nachinayushhim-ustanovka-i-pervonachal-naya-nastroyka-debian-11-dlya-servera.html)
-- Сеть
-  - [Основы iptables для начинающих. Часть 1. Общие вопросы](https://interface31.ru/tech_it/2020/02/osnovy-iptables-dlya-nachinayushhih-chast-1.html)
-  - [Основы iptables для начинающих. Часть 2. Таблица filter](https://interface31.ru/tech_it/2020/09/osnovy-iptables-dlya-nachinayushhih-chast-2-tablica-filter.html)
-  - [Основы iptables для начинающих. Часть 3. Таблица nat](https://interface31.ru/tech_it/2021/07/osnovy-iptables-dlya-nachinayushhih-chast-3-tablica-nat.html)
-  - [Основы iptables для начинающих. Часть 4. Таблица nat - типовые сценарии использования](https://interface31.ru/tech_it/2021/08/osnovy-iptables-dlya-nachinayushhih-chast-4-tablica-nat-tipovye-scenarii-ispolzovaniya.html)
-- Proxmox
-  - [Установка сети в Proxmox](https://help.reg.ru/support/vydelennyye-servery-i-dc/administrirovaniye-vydelennykh-serverov/ustanovka-i-nastroyka-seti-v-proxmox-ve#1)
-  - [Настраиваем сеть в Proxmox](https://interface31.ru/tech_it/2019/10/nastraivaem-set-v-proxmox-ve.html)
-- [Arch Linux | User and Groups](https://wiki.archlinux.org/title/Users_and_groups_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9))
-- [Как посмотреть пользователей в Linux](https://timeweb.cloud/tutorials/linux/kak-posmotret-polzovatelej-v-linux)
-- [Arch Linux | Группы](https://wiki.archlinux.org/title/Users_and_groups_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)#%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA_%D0%B3%D1%80%D1%83%D0%BF%D0%BF)
-- [Habr | Права в Linux](https://habr.com/ru/articles/469667/)
-- [Общие папки Linux](https://losst.pro/obshhie-papki-linux)
-- [О разных командных оболочках Linux и Unix](https://habr.com/ru/articles/157283/)
-- [How to disable X server autostart in Debian Jessie?](https://unix.stackexchange.com/questions/264393/how-to-disable-x-server-autostart-in-debian-jessie)
-- [htop и многое другое на пальцах](https://habr.com/ru/articles/316806/)
-- [Контроль нагрузки и процессов: top, htop, atop](https://timeweb.cloud/docs/unix-guides/troubleshooting-unix/load-and-process-control-top-htop-atop)
-- [Как добавить официальный репозиторий в Debian](https://help.reg.ru/support/servery-vps/oblachnyye-servery/ustanovka-programmnogo-obespecheniya/debian-repozitorii#3)
-- [Solution to os-prober not finding other operating systems (Windows & Linux)](https://www.umutsagir.com/solution-to-os-prober-not-finding-other-operating-systems-windows-linux/)
-- [How can I add Windows 11 to grub menu?](https://askubuntu.com/questions/1425637/how-can-i-add-windows-11-to-grub-menu)
-- [Grub/os-prober problems with dual booting windows and arch](https://bbs.archlinux.org/viewtopic.php?id=283411)
-- [Команда Linux blkid](https://linuxcookbook.ru/articles/komanda-linux-blkid)
-- [Данные о дисках: df, lsblk, parted, fdisk](https://timeweb.cloud/docs/unix-guides/troubleshooting-unix/disk-data-df-lsblk-parted-fdisk)
-- [Сторонние репозитории для Debian Stable](https://vk.com/@-53008948-storonnie-repozitorii-dlya-debian-stable)
-- [Install Docker using the apt repository](https://docs.docker.com/engine/install/debian/#install-using-the-repository)
-- [Как справиться с устареванием apt-key и add-apt-repository с помощью gpg в Ubuntu 22.04](https://habr.com/ru/articles/683716/)
-- [Install Docker Engine on Debian](https://docs.docker.com/engine/install/debian/)
-- [Осваиваем команду Linux Netstat: от основ до продвинутого мониторинга сети](https://go.lightnode.com/ru/tech/linux-netstat-command)
+### 01_02
+- Пользователь: добавление, удаление, права
+  - [Arch Linux | User and Groups](https://wiki.archlinux.org/title/Users_and_groups_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9))
+  - [Как посмотреть пользователей в Linux](https://timeweb.cloud/tutorials/linux/kak-posmotret-polzovatelej-v-linux)
+  - [Общие папки Linux](https://losst.pro/obshhie-papki-linux)
+- Группы
+  - [Arch Linux | Группы](https://wiki.archlinux.org/title/Users_and_groups_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)#%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA_%D0%B3%D1%80%D1%83%D0%BF%D0%BF)
+  - [Habr | Права в Linux](https://habr.com/ru/articles/469667/)
